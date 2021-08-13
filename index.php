@@ -40,7 +40,7 @@ session_start();
 
 		<!-- login -->
 		<div class="bg-white mt-5 card card-body col-md-6 m-auto login-form">
-			<p align="center" class="h1 p-1">NotesApp</p><br>
+			<p align="center" class="h1 p-1">Authentication</p><br>
 			<form action="user/login.php" method="post">
 				<div class=" mb-3">
 					<input autocomplete="off" type="text" name="uname" class='form-control' placeholder="Username">

@@ -7,8 +7,8 @@
 
 
 <div class="m-auto mt-5 card card-body col-md-6">
-    <p class="h1 " align="center">NotesApp</p>
-    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
+    <p class="h1 " align="center">Auth App</p>
+    <form action="signup.php" method="post">
         <div class="mb-3">
             <input class="form-control" type="text" name="flname" placeholder="FullName">
         </div>
@@ -23,7 +23,7 @@
 
         <div class="mb-3">
 
-            <input class="form-control" type="password" name="pwd" placeholder="Password (Not less than 8 characters*)">
+            <input class="form-control" type="password" name="pwd" placeholder="Password">
             <!-- <p</pre> -->
             <!-- <PRE></PRE> -->
         </div>
@@ -42,7 +42,6 @@
 
 <?php
 
-//include '../config/db.php';
 
 if (isset($_SERVER['REQUEST_METHOD']) == 'POST') {
     if (isset($_POST['sbtn'])) {
@@ -62,23 +61,25 @@ if (isset($_SERVER['REQUEST_METHOD']) == 'POST') {
 	$pwd = strip_tags($_POST['pwd']);
 
 
-        if (empty($name) || empty($email) || empty($uid) || empty($pwd)) {
+        /** if (empty($name) | empty($email) || empty($uid) || empty($pwd)) {
             header("Location: index.php?error=empty");
             exit();
-        } elseif (!preg_match("/^[a-z A-Z]*$/", $name)) {
-            header("Location: index.php?error=" . $name);
+	} **/ 
+	if (!preg_match("/^[a-z A-Z]*$/", $name)) {
+            header("Location: ../index.php?error=".$name);
             exit();
         }
 
-        if (strlen($pwd) < 8) {
+        /**if (strlen($pwd) < 8) {
 
             header("Location:signup.php?sn&pwd=err");
             exit();
-        } elseif (!preg_match("/^[a-z A-Z0-9]*$/", $uid)) {
-            header("Location: index.php?error=incorrect" . $uid);
+	}**/
+       	elseif (!preg_match("/^[a-z A-Z0-9]*$/", $uid)) {
+            header("Location: ../index.php?error=incorrect" . $uid);
             exit();
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            header("Location: index.php?error=empty");
+            header("Location: ../index.php?error=empty");
             exit();
 	} else {
 
@@ -90,16 +91,18 @@ if (isset($_SERVER['REQUEST_METHOD']) == 'POST') {
 	    **/
 
 		require '../models/User.php';
-		require '../config.php';
+		require '../config/Database.php';
 
 		$db = new Database();
 		$db = $db->connect();
 		$user = new User($db);
+		
 		$user->fullname = $name;
 		$user->email = $email;
 		$user->uname = $uid;
 
-		$result = $user->checkUser_Uname();
+		$result = $user->checkuser_uname();
+		
 		$num = $result->rowCount();
 
             if ($num > 0) {
@@ -108,11 +111,7 @@ if (isset($_SERVER['REQUEST_METHOD']) == 'POST') {
             } else {
                 $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
 		$user->pwd = $hashedPwd;
-		$user->createUser();
-
-		//$sql = "INSERT INTO users(user_fullname, user_email, user_uname, user_pwd,created_at) VALUES('$name', '$email', '$uid', '$hashedPwd', NOW()) ";
-                //mysqli_query($conn, $sql);
-		
+		$user->createUser();		
 		header("Location: ../index.php?signup=sucess");
                 exit();
             }

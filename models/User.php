@@ -1,7 +1,9 @@
 <?php
 
 class User{
+
 	private $conn;
+
 	public function __construct($db){ 
 		$this->conn = $db;
 	}
@@ -16,8 +18,8 @@ class User{
 	//common query for checking 
 	//
 	//
-	public function checkUser_Uname(){
-		$sql = "SELECT * FROM users WHERE user_uname = :user_uname";
+	public function checkuser_uname(){
+		$sql = "SELECT * FROM {$this->table} WHERE user_uname = :user_uname";
 		$stmt = $this->prepare($sql);
 		$stmt->bindParam(':user_uname', $this->uname);
 		$stmt->execute();
@@ -35,12 +37,13 @@ class User{
 
 
 	public function createUser(){
-		$sql = "INSERT INTO {$this->table}(user_fullname, user_email, user_uname, user_pwd) VALUES(:user_fullname, :user_email, :user_uname, :user_pwd)";
+		$sql = "INSERT INTO {$this->table}(user_fullname, user_email, user_uname, user_pwd, created_at) VALUES(:user_fullname, :user_email, :user_uname, :user_pwd, :created_at)";
 		$stmt = $this->conn->prepare($sql);
 		$stmt->bindParam(':user_fullname', $this->fullname);
 		$stmt->bindParam(':user_email', $this->email);
 		$stmt->bindParam(':user_uname', $this->uname);
 		$stmt->bindParam(':user_pwd', $this->pwd);
+		$stmt->bindParam(':created_at', 'NOW()');
 		$stmt->execute();
 	}
 

@@ -1,17 +1,24 @@
 <?php
+
 session_start();
-include '../config/db.php';
+
+
+require '../models/User.php';
+require '../config/Database.php';
+
 
 if (isset($_SESSION['u_id'])) {
 
-    $sql = "INSERT INTO users(last_seen) VALUES(NOW()) WHERE user_id = {$_SESSION['u_id']}";
-    mysqli_query($conn, $sql);
+	$databse = new Database();
+	$db = $database->connect();
+	$user = new User($db);
+	$user->user_id = $_SESSION['u_id'];
+	$user->update_last_seen(); //update last seen
 
-
-    session_unset();
-
-    session_destroy();
-
-    header('location: ../index.php');
-    exit();
+    	session_unset();
+	
+	session_destroy();
+       
+	header('location: ../index.php');
+   	exit();
 }

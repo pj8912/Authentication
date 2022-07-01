@@ -44,5 +44,10 @@ class User{
 		$stmt->execute();
 	}
 
-
+	public function update_last_seen(){
+		$sql = "INSERT INTO {$this->table}(last_seen) VALUES(NOW()) WHERE user_id = :user_id";
+		$stmt = $this->conn->prepare($sql);
+		$this->user_id = (int) $this->user_id;
+		$stmt->bindParam(':user_id', $this->user_id);
+		$stmt->execute();
 } 

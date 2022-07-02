@@ -31,7 +31,10 @@ session_start();
 <body class="bg-light">
 
 	<?php if (isset($_SESSION['u_id'])) : ?>
-		<a class="btn btn-danger text-center" href="user/logout.php">logout</a>
+		<div class=" mt-5" align="center">
+
+			<a class="btn btn-danger text-center rounded-0"  href="user/logout.php">logout</a>
+		</div>
 	<?php endif; ?>
 
 

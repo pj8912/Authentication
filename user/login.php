@@ -10,12 +10,9 @@ if (isset($_SERVER['REQUEST_METHOD']) == "POST") {
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-     //   $uname = mysqli_real_escape_string($conn, $_POST['uname']);
 
-      //  $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
-
-	$uname = htmlentities(strip_tags($_POST['uname']));
-	$pwd = strip_tags($_POST['pwd']);
+        $uname = htmlentities(strip_tags($_POST['uname']));
+        $pwd = strip_tags($_POST['pwd']);
 
 
 
@@ -29,27 +26,26 @@ if (isset($_SERVER['REQUEST_METHOD']) == "POST") {
         }
 
 
-	require '../config/Database.php';
-	require '../models/User.php';
+        require_once '../config/Database.php';
+        require_once '../models/User.php';
 
-	$db = new Database();
-	$db = $db->connect();
+        $db = new Database();
+        $db = $db->connect();
 
-	$user = new User($db);
+        $user = new User($db);
 
-	$user->uname = $uname;
+        $user->uname = $uname;
 
-	$result = $user->checkUser_Uname();
-	
+        $result = $user->checkUser_Uname();
+
         //$sql = "SELECT * FROM users WHERE user_uname = '$uname' ";
-	//$result = mysqli_query($conn, $sql);
-	
-	$num = $result->rowCount();
+        //$result = mysqli_query($conn, $sql);
 
-        if ($num  < 0) {
-            header('location: ../index.php?uname_err');
-            exit();
-        } else {
+        $num = $result->rowCount();
+
+        if ($num > 0) {
+
+
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
                 $hashedpwd = $row['user_pwd'];
@@ -72,6 +68,9 @@ if (isset($_SERVER['REQUEST_METHOD']) == "POST") {
                     exit();
                 }
             }
+        } else {
+            header('location: ../index.php?uname_err');
+            exit();
         }
     }
 }

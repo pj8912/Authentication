@@ -1,24 +1,28 @@
+<?php session_start();?>
+
 <?php
 
-session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 
 
-require '../models/User.php';
-require '../config/Database.php';
 
 
 if (isset($_SESSION['u_id'])) {
 
-	$databse = new Database();
-	$db = $database->connect();
-	$user = new User($db);
-	$user->user_id = $_SESSION['u_id'];
-	$user->update_last_seen(); //update last seen
+	require '../config/Database.php';
+	require '../models/User.php';
 
-    	session_unset();
-	
+	$database = new Database();
+	$db = $database->connect();
+
+	$user = new User($db);
+	$uid = $_SESSION['u_id'];
+	$user->update_last_seen($uid);
+
+	session_unset();
 	session_destroy();
-       
+
 	header('location: ../index.php');
-   	exit();
+	exit();
 }

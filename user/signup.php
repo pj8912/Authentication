@@ -48,25 +48,20 @@ if (isset($_SERVER['REQUEST_METHOD']) == 'POST') {
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-	/**
-        $name = mysqli_real_escape_string($conn, $_POST['flname']);
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $uid = mysqli_real_escape_string($conn, $_POST['uname']);
-        $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
-	**/
 
-	$name = htmlentities(strip_tags($_POST['flname']));
-	$email = htmlentities(strip_tags($_POST['email']));
-	$uid = htmlentities(strip_tags($_POST['uname']));
-	$pwd = strip_tags($_POST['pwd']);
+        $name = htmlentities(strip_tags($_POST['flname']));
+        $email = htmlentities(strip_tags($_POST['email']));
+        $uid = htmlentities(strip_tags($_POST['uname']));
+        $pwd = strip_tags($_POST['pwd']);
 
 
-        /** if (empty($name) | empty($email) || empty($uid) || empty($pwd)) {
-            header("Location: index.php?error=empty");
-            exit();
-	} **/ 
-	if (!preg_match("/^[a-z A-Z]*$/", $name)) {
-            header("Location: ../index.php?error=".$name);
+        // if (empty($name) | empty($email) || empty($uid) || empty($pwd)) {
+        // header("Location: index.php?error=empty");
+        // exit();
+        // } 
+
+        if (!preg_match("/^[a-z A-Z]*$/", $name)) {
+            header("Location: ../index.php?error=" . $name);
             exit();
         }
 
@@ -75,44 +70,38 @@ if (isset($_SERVER['REQUEST_METHOD']) == 'POST') {
             header("Location:signup.php?sn&pwd=err");
             exit();
 	}**/
-       	elseif (!preg_match("/^[a-z A-Z0-9]*$/", $uid)) {
+        elseif (!preg_match("/^[a-zA-Z0-9]*$/", $uid)) {
             header("Location: ../index.php?error=incorrect" . $uid);
             exit();
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             header("Location: ../index.php?error=empty");
             exit();
-	} else {
+        } else {
 
-            /**$sql = "SELECT * FROM users WHERE user_uname = '$uid' ";
+            require '../models/User.php';
+            require '../config/Database.php';
 
-            $result = mysqli_query($conn, $sql);
+            $db = new Database();
+            $db = $db->connect();
+            $user = new User($db);
 
-	    $num = mysqli_num_rows($result);
-	    **/
+            $user->fullname = $name;
+            $user->email = $email;
+            $user->uname = $uid;
 
-		require '../models/User.php';
-		require '../config/Database.php';
+            $result = $user->checkuser_uname();
 
-		$db = new Database();
-		$db = $db->connect();
-		$user = new User($db);
-		
-		$user->fullname = $name;
-		$user->email = $email;
-		$user->uname = $uid;
-
-		$result = $user->checkuser_uname();
-		
-		$num = $result->rowCount();
+            $num = $result->rowCount();
 
             if ($num > 0) {
-		   header("Location: ../index.php?err=uname");
+                //username already exists
+                header("Location: ../index.php?err=uname");
                 exit();
             } else {
                 $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
-		$user->pwd = $hashedPwd;
-		$user->createUser();		
-		header("Location: ../index.php?signup=sucess");
+                $user->pwd = $hashedPwd;
+                $user->createUser(); //createuser
+                header("Location: ../index.php?signup=sucess");
                 exit();
             }
         }

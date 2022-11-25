@@ -1,30 +1,25 @@
 <?php
 
+namespace Auth\model;
+
+
 class User
 {
 
 	private $conn;
-
 	public function __construct($db)
 	{
 		$this->conn = $db;
 	}
-
-
 	private $table = "users";
-
-	public $user_id, $fullname, $email, $uname, $pwd;
-
+	public $user_id, $fullname, $email, $pwd;
 
 
-	//common query for checking 
-	//
-	//
-	public function checkuser_uname()
+	public function check_user()
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE user_uname = :user_uname";
+		$sql = "SELECT * FROM {$this->table} WHERE user_email = :user_email";
 		$stmt = $this->conn->prepare($sql);
-		$stmt->bindParam(':user_uname', $this->uname);
+		$stmt->bindParam(':user_email', $this->email);
 		$stmt->execute();
 		return $stmt;
 	}
@@ -42,12 +37,11 @@ class User
 
 	public function createUser()
 	{
-		$sql = "INSERT INTO {$this->table}(user_fullname, user_email, user_uname, user_pwd, created_at)
-		 VALUES(:user_fullname, :user_email, :user_uname, :user_pwd, NOW())";
+		$sql = "INSERT INTO {$this->table}(user_fullname, user_email, user_pwd, created_at)
+		 VALUES(:user_fullname, :user_email, :user_pwd, NOW())";
 		$stmt = $this->conn->prepare($sql);
 		$stmt->bindParam(':user_fullname', $this->fullname);
 		$stmt->bindParam(':user_email', $this->email);
-		$stmt->bindParam(':user_uname', $this->uname);
 		$stmt->bindParam(':user_pwd', $this->pwd);
 		$stmt->execute();
 	}
@@ -58,4 +52,6 @@ class User
 		$stmt = $this->conn->query($sql);
 		$stmt->execute();
 	}
+	
+	
 }

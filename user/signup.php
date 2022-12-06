@@ -23,32 +23,35 @@
             <form action="signup_process.php" method="post">
 
                 <div class="mb-2">
-                    <input class="form-control" type="text" name="flname" placeholder="FullName">
+                    <input class="form-control" autocomplete="off"  type="text" name="flname" placeholder="FullName*" required>
                 </div>
 
                 <div class="mb-2">
-                    <input class="form-control" type="email" name="email" placeholder="Email">
+                    <input class="form-control" autocomplete="off"  id="email" type="email" name="email" placeholder="Email*" required>
                 </div>
 
 
                 <div class="mb-2">
-                    <input class="form-control" type="password" name="pwd" placeholder="Password">
+                    <input class="form-control" autocomplete="off"  type="password" name="pwd" placeholder="Password*" required>
                 </div>
 
-                <div class="d-grid gap-2  ">
+                <div class="d-grid gap-2">
                     <button type="submit" name="sbtn" class="btn btn-success" align="center">
 
                         Sign Up
                     </button>
                 </div>
 
-                <p class="text-center mt-3">Already have an account <a href="../index.php">Log in</a></p>
+                <p class="text-center mt-3">Already have an account? <a href="../index.php">Log in</a></p>
 
 
             </form>
         </div>
 
     </div>
+
+
+<script src="validate.js"></script>
 
 </body>
 

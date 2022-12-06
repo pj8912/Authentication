@@ -62,7 +62,7 @@
                         </div>
 
                     </form>
-                    <p align="Center" class="mt-5"> Don't Have and account <a href="user/signup.php">Sign Up</a> </p>
+                    <p align="Center" class="mt-5"> Don't Have and account? <a href="user/signup.php">Sign Up</a> </p>
                 </div>
             <?php endif; ?>
 

@@ -1,4 +1,4 @@
-# php-loginapp
+# Authentication
 Authentication  app in PHP
 
 ## Use

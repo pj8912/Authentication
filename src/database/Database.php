@@ -3,7 +3,8 @@
 namespace Auth\database;
 
 class Database{
-    private $host = 'localhost';
+    
+	private $host = 'localhost';
 	private $uname = 'root';
 	private $pwd = '';
 	private $db = 'authentication';
